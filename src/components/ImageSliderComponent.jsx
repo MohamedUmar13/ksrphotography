@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion';
 
-export default function ImageSliderComponent ({images}) {
+export default function ImageSliderComponent({ images }) {
 
     const [positionIndexes, setPositionIndexes] = useState([0, 1, 2, 3, 4]);
 
@@ -28,18 +28,18 @@ export default function ImageSliderComponent ({images}) {
     }, []);
 
     return (
-        <div className='flex items-center flex-col justify-center bg-[#0a0a0a] h-screen'>
+        <div className='flex items-center flex-col justify-center bg-[#0a0a0a] h-[60vh] md:h-screen '>
             {images.map((image, index) => (
                 <motion.img
                     key={index}
                     src={image}
                     alt={image}
-                    className="rounded-[12px]"
+                    className="absolute rounded-[12px] 
+                    w-[85%] sm:w-[70%] md:w-[50%] lg:w-[40%]"
                     initial="center"
                     animate={positions[positionIndexes[index]]}
                     variants={imageVariants}
                     transition={{ duration: 0.5 }}
-                    style={{ width: '40%', position: 'absolute' }}
                 />
             ))}
         </div>

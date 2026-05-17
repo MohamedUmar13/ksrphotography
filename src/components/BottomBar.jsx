@@ -32,7 +32,8 @@ export default function BottomBar() {
                     width: "100%",
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "flex-end",
+                    alignItems: { xs: "flex-start", md: "flex-end" },
+                    flexDirection: { xs: "column", md: "row" }
                 }}
             >
                 <Box>
@@ -71,7 +72,7 @@ export default function BottomBar() {
                     </Typography>
                 </Box>
 
-                <Box>
+                <Box sx={{ display: { xs: "none", md: "block" } }}>
                     <Typography
                         variant="body2"
                         sx={{
@@ -83,7 +84,7 @@ export default function BottomBar() {
                     </Typography>
                 </Box>
 
-                <Box>
+                <Box sx={{ my: { xs: 3, md: 0 } }}>
                     <Typography
                         variant="h5"
                         sx={{
@@ -129,6 +130,19 @@ export default function BottomBar() {
                         }
                     </Typography>
                 </Box>
+
+                <Box sx={{ display: { xs: "flex", md: "none" }, justifyContent: "center", width: "100%" }}>
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            opacity: 0.5,
+                            letterSpacing: "0.05em",
+                        }}
+                    >
+                        © {new Date().getFullYear()} KSR Photography · All Rights Reserved
+                    </Typography>
+                </Box>
+
             </Box>
         </Box>
     );

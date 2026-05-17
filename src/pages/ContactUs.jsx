@@ -23,7 +23,7 @@ export default function ContactUs() {
 
         try {
             await emailjs.send(
-                "service_u47o2k9",
+                "service_vabzpmf",
                 "template_dl2l6pk",
                 {
                     name: name,
@@ -45,18 +45,19 @@ export default function ContactUs() {
     };
 
     return (
-        <Box className="relative">
+        <Box className="relative" sx={{ backgroundColor: "#1C1C1C" }}>
             {/* BACKGROUND MAP */}
-            <Box sx={{ height: "100vh", backgroundColor: "#1C1C1C", color: "white" }}>
-                {/* <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.5534459359637!2d78.81879297481214!3d10.38060208974516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0079fe1e679271%3A0xdfe5f291d1e91b5f!2sKSR%20PHOTOGRAPHY!5e1!3m2!1sen!2sin!4v1767020135300!5m2!1sen!2sin"                    
+            <Box sx={{ minHeight: "100vh", color: "white" }}>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.5534459359637!2d78.81879297481214!3d10.38060208974516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0079fe1e679271%3A0xdfe5f291d1e91b5f!2sKSR%20PHOTOGRAPHY!5e1!3m2!1sen!2sin!4v1767020135300!5m2!1sen!2sin"
                     width="100%"
                     height="480"
                     className="pt-16"
                     loading="lazy"
-                /> */}
+                />
 
-                <LoadScript googleMapsApiKey="YOUR_API_KEY">
+                {/* GOOGLE MAP */}
+                {/* <LoadScript googleMapsApiKey="YOUR_API_KEY">
                     <GoogleMap
                         mapContainerStyle={{ width: "100%", height: "480px" }}
                         center={center}
@@ -64,17 +65,20 @@ export default function ContactUs() {
                     >
                         <Marker position={center} />
                     </GoogleMap>
-                </LoadScript>
+                </LoadScript> */}
 
                 {/* INFO STRIP */}
                 <Box
                     sx={{
                         display: "flex",
-                        pt: 8,
+                        pt: { xs: 5, md: 8 },
+                        flexDirection: { xs: "column", md: "row" },
+                        gap: { xs: 5, md: 15 },
+                        px: { xs: 5, md: 10 }
                     }}
                 >
                     {/* ADDRESS */}
-                    <Box sx={{ px: 10 }}>
+                    <Box>
                         <Typography
                             sx={{
                                 textTransform: "uppercase",
@@ -89,13 +93,13 @@ export default function ContactUs() {
 
                         <Typography sx={{ lineHeight: 1.7, opacity: 0.9 }}>
                             South 3rd Street <br />
-                            Near Tharagai Readymades <br />
+                            Near Anna Salai <br />
                             Pudukkottai – 622 001
                         </Typography>
                     </Box>
 
                     {/* CONTACT */}
-                    <Box sx={{ px: 10 }}>
+                    <Box>
                         <Typography
                             sx={{
                                 textTransform: "uppercase",
@@ -116,7 +120,7 @@ export default function ContactUs() {
                         </Typography>
                     </Box>
 
-                    <Box sx={{ px: 5 }}>
+                    <Box>
                         <Typography
                             sx={{
                                 textTransform: "uppercase",
@@ -139,12 +143,15 @@ export default function ContactUs() {
 
                 </Box>
 
+                {/* Follow Us */}
                 <Box
                     sx={{
                         px: 10,
-                        py: 2,
-                        display: "flex",
-                        alignItems: 'end'
+                        py: { xs: 0, md: 2 },
+                        display: { xs: "none", md: "flex" },
+                        alignItems: { xs: "center", md: "end" },
+                        flexDirection: { xs: "column", md: "row" },
+                        pt: { xs: 5, md: 4 }
                     }}
                 >
                     <Typography
@@ -167,15 +174,18 @@ export default function ContactUs() {
             {/* CONTACT FORM OVERLAY */}
             <Box
                 sx={{
-                    position: "absolute",
-                    bottom: 80,
-                    right: 80,
+                    position: { xs: "static", md: "absolute" }, // 🔥 key change
+                    bottom: { md: 80 },
+                    right: { md: 80 },
                     zIndex: 10,
+                    width: { xs: "100%", md: "auto" },
+                    px: { xs: 2, md: 0 },
+                    py: 5
                 }}
             >
                 <Box
                     sx={{
-                        width: 380,
+                        width: { xs: "100%", md: 380 }, // 🔥 responsive
                         p: 4,
                         borderRadius: "16px",
                         background: "rgba(255,255,255,0.92)",
@@ -245,6 +255,32 @@ export default function ContactUs() {
                     </Button>
                 </Box>
             </Box>
+
+            <Box
+                sx={{
+                    px: 10,
+                    pb: 3,
+                    display: { xs: "flex", md: "none" },
+                    alignItems: { xs: "center", md: "end" },
+                    flexDirection: { xs: "column", md: "row" }
+                }}
+            >
+                <Typography
+                    sx={{
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        opacity: 0.7,
+                        mb: 2,
+                        fontSize: "0.8rem",
+                        color: "white"
+                    }}
+                >
+                    Follow us on
+                </Typography>
+
+                <FollowUs />
+            </Box>
+
         </Box>
     );
 }

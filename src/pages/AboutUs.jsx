@@ -226,51 +226,60 @@ export default function AboutUsPage() {
                 </div>
 
                 {/* TIMELINE */}
-                <Box className="relative w-full">
+<Box className="relative w-full">
 
-                    {/* LINE */}
-                    <Box className="absolute top-5 left-0 w-full h-[1px] bg-gray-700" />
+  {/* DESKTOP LINE */}
+  <Box className="hidden md:block absolute top-5 left-0 w-full h-[1px] bg-gray-700" />
 
-                    <Grid container justifyContent="space-between">
+  <Grid container spacing={4} justifyContent="space-between">
 
-                        {[
-                            { title: "Vision", desc: "Understanding your story." },
-                            { title: "Session", desc: "Capturing real moments." },
-                            { title: "Gallery", desc: "Delivering timeless visuals." },
-                        ].map((item, i) => (
+    {[
+      { title: "Vision", desc: "Understanding your story." },
+      { title: "Session", desc: "Capturing real moments." },
+      { title: "Gallery", desc: "Delivering timeless visuals." },
+    ].map((item, i) => (
 
-                            <Grid item xs={4} key={i} className="text-center relative">
+      <Grid
+        item
+        xs={12}
+        md={4}
+        key={i}
+        className="relative text-center md:text-center flex md:block items-start md:items-center"
+      >
 
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="flex flex-col items-center"
-                                >
+        {/* MOBILE LINE */}
+        <Box className="md:hidden absolute left-2 top-0 bottom-0 w-[1px] bg-gray-700" />
 
-                                    {/* DOT */}
-                                    <Box className="w-4 h-4 bg-white rounded-full z-10 mb-4" />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex md:flex-col items-start md:items-center gap-4 md:gap-0"
+        >
 
-                                    {/* TITLE */}
-                                    <Typography variant="h6" className="mt-1">
-                                        {item.title}
-                                    </Typography>
+          {/* DOT */}
+          <Box className="w-4 h-4 bg-white rounded-full z-10 mt-1 md:mb-4" />
 
-                                    {/* DESC */}
-                                    <Typography className="text-gray-400 text-sm max-w-[180px]">
-                                        {item.desc}
-                                    </Typography>
+          {/* TEXT */}
+          <Box>
+            <Typography variant="h6">
+              {item.title}
+            </Typography>
 
-                                </motion.div>
+            <Typography className="text-gray-400 text-sm max-w-[220px]">
+              {item.desc}
+            </Typography>
+          </Box>
 
-                            </Grid>
+        </motion.div>
 
-                        ))}
+      </Grid>
 
-                    </Grid>
+    ))}
 
-                </Box>
+  </Grid>
 
+</Box>
             </Container>
 
         </Box>
