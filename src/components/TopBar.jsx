@@ -81,6 +81,7 @@ export default function TopBar() {
           open={open}
           onClose={handleClose}
           transitionDuration={0}
+          disableScrollLock
         >
           {activeMenu?.children?.map((item) => (
             <MenuItem
@@ -175,7 +176,7 @@ export default function TopBar() {
         </Box>
       </Drawer>
 
-
+      {/* Weddings drawer Mobile */}
       <Drawer
         anchor="bottom"
         open={weddingsBarOpen}
@@ -223,9 +224,9 @@ export default function TopBar() {
                 >
                   <ListItemButton
                     onClick={() => {
-                        navigate(wedding.path);
-                        setWeddingsBarOpen(false);
-                        setPagesBarOpen(false);
+                      navigate(wedding.path);
+                      setWeddingsBarOpen(false);
+                      setPagesBarOpen(false);
                     }}
                     sx={{
                       py: 2,

@@ -161,6 +161,8 @@ export default function Hindu() {
         </div>
       </section>
 
+      <ImageSliderComponent images={[image5, image6, image7, image8, image9]} />
+
       {/* ROYAL REVEAL */}
       <section className="relative bg-gradient-to-b from-[#2a1c14] via-[#1e140f] to-[#2a1c14] py-40 overflow-hidden">
 
@@ -169,8 +171,8 @@ export default function Hindu() {
 
         {/* Double gold frame */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-14 left-14 right-14 bottom-14 border border-[#c04a1a]/50 rounded-[3rem]" />
-          <div className="absolute top-24 left-24 right-24 bottom-24 border border-[#c04a1a]/25 rounded-[2.5rem]" />
+          <div className="absolute left-4 right-4 md:left-14 md:right-14 bottom-14 border border-[#c04a1a]/50 rounded-[3rem]" />
+          <div className="absolute left-8 right-8 md:left-24 md:right-24 bottom-24 border border-[#c04a1a]/25 rounded-[2.5rem]" />
         </div>
 
         {/* Content */}
@@ -205,7 +207,6 @@ export default function Hindu() {
         </div>
       </section>
 
-      <ImageSliderComponent images={[image5, image6, image7, image8, image9]} />
     </>
   );
 }

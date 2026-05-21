@@ -4,6 +4,7 @@ import heroImage from "../assets/images/hero-home.jpg";
 import { useNavigate } from "react-router-dom";
 import Counter from "../components/Counter";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect } from "react";
 
 const stats = [
   { label: "Shoots Completed", value: 250, icon: Camera },
@@ -52,6 +53,10 @@ const highlights = [
 ];
 
 export default function HomePage() {
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const navigate = useNavigate();
 
@@ -471,7 +476,7 @@ export default function HomePage() {
   );
 }
 
-    {/* <Grid container spacing={2.5}>
+{/* <Grid container spacing={2.5}>
               {highlights.map((item) => (
                 <Grid item xs={12} sm={4} key={item.title}>
                   <Box
@@ -492,76 +497,76 @@ export default function HomePage() {
               ))}
             </Grid> */}
 
-  // <Box sx={{ bgcolor: "#171717", py: { xs: 10, md: 14 } }}>
-  //       <Container maxWidth="xl">
-  //         <Stack spacing={2} sx={{ textAlign: "center", mb: 7 }}>
-  //           <Typography sx={{ color: "#dbc6a3", letterSpacing: "0.3em", fontSize: "0.76rem" }}>
-  //             SERVICES
-  //           </Typography>
-  //           <Typography
-  //             sx={{
-  //               fontFamily: "'Playfair Display', serif",
-  //               fontSize: { xs: "2.2rem", md: "3.8rem" },
-  //               lineHeight: 1.05,
-  //             }}
-  //           >
-  //             Distinct photography for meaningful milestones and modern brands.
-  //           </Typography>
-  //           <Typography
-  //             sx={{
-  //               maxWidth: 760,
-  //               mx: "auto",
-  //               color: "rgba(255,255,255,0.7)",
-  //               lineHeight: 1.9,
-  //             }}
-  //           >
-  //             Whether you are celebrating a once-in-a-lifetime event or shaping a strong
-  //             visual identity, the experience is tailored to feel seamless and premium.
-  //           </Typography>
-  //         </Stack>
+// <Box sx={{ bgcolor: "#171717", py: { xs: 10, md: 14 } }}>
+//       <Container maxWidth="xl">
+//         <Stack spacing={2} sx={{ textAlign: "center", mb: 7 }}>
+//           <Typography sx={{ color: "#dbc6a3", letterSpacing: "0.3em", fontSize: "0.76rem" }}>
+//             SERVICES
+//           </Typography>
+//           <Typography
+//             sx={{
+//               fontFamily: "'Playfair Display', serif",
+//               fontSize: { xs: "2.2rem", md: "3.8rem" },
+//               lineHeight: 1.05,
+//             }}
+//           >
+//             Distinct photography for meaningful milestones and modern brands.
+//           </Typography>
+//           <Typography
+//             sx={{
+//               maxWidth: 760,
+//               mx: "auto",
+//               color: "rgba(255,255,255,0.7)",
+//               lineHeight: 1.9,
+//             }}
+//           >
+//             Whether you are celebrating a once-in-a-lifetime event or shaping a strong
+//             visual identity, the experience is tailored to feel seamless and premium.
+//           </Typography>
+//         </Stack>
 
-  //         <Grid container spacing={3}>
-  //           {services.map((service) => (
-  //             <Grid item xs={12} md={4} key={service.title}>
-  //               <Box
-  //                 sx={{
-  //                   height: "100%",
-  //                   p: { xs: 3, md: 4 },
-  //                   borderRadius: 6,
-  //                   border: "1px solid rgba(255,255,255,0.08)",
-  //                   background:
-  //                     "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-  //                   transition: "transform 250ms ease, border-color 250ms ease",
-  //                   "&:hover": {
-  //                     transform: "translateY(-6px)",
-  //                     borderColor: "rgba(219,198,163,0.45)",
-  //                   },
-  //                 }}
-  //               >
-  //                 <Typography sx={{ color: "#dbc6a3", fontSize: "0.85rem", letterSpacing: "0.24em", mb: 3 }}>
-  //                   {service.number}
-  //                 </Typography>
-  //                 <Typography sx={{ fontSize: "1.45rem", fontWeight: 600, mb: 2 }}>
-  //                   {service.title}
-  //                 </Typography>
-  //                 <Typography sx={{ color: "rgba(255,255,255,0.68)", lineHeight: 1.9, mb: 4 }}>
-  //                   {service.description}
-  //                 </Typography>
-  //                 <Button
-  //                   endIcon={<ArrowRight size={16} />}
-  //                   sx={{
-  //                     p: 0,
-  //                     color: "#fff",
-  //                     justifyContent: "flex-start",
-  //                     letterSpacing: "0.12em",
-  //                     "&:hover": { bgcolor: "transparent", color: "#dbc6a3" },
-  //                   }}
-  //                 >
-  //                   Learn More
-  //                 </Button>
-  //               </Box>
-  //             </Grid>
-  //           ))}
-  //         </Grid>
-  //       </Container>
-  //     </Box>
+//         <Grid container spacing={3}>
+//           {services.map((service) => (
+//             <Grid item xs={12} md={4} key={service.title}>
+//               <Box
+//                 sx={{
+//                   height: "100%",
+//                   p: { xs: 3, md: 4 },
+//                   borderRadius: 6,
+//                   border: "1px solid rgba(255,255,255,0.08)",
+//                   background:
+//                     "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
+//                   transition: "transform 250ms ease, border-color 250ms ease",
+//                   "&:hover": {
+//                     transform: "translateY(-6px)",
+//                     borderColor: "rgba(219,198,163,0.45)",
+//                   },
+//                 }}
+//               >
+//                 <Typography sx={{ color: "#dbc6a3", fontSize: "0.85rem", letterSpacing: "0.24em", mb: 3 }}>
+//                   {service.number}
+//                 </Typography>
+//                 <Typography sx={{ fontSize: "1.45rem", fontWeight: 600, mb: 2 }}>
+//                   {service.title}
+//                 </Typography>
+//                 <Typography sx={{ color: "rgba(255,255,255,0.68)", lineHeight: 1.9, mb: 4 }}>
+//                   {service.description}
+//                 </Typography>
+//                 <Button
+//                   endIcon={<ArrowRight size={16} />}
+//                   sx={{
+//                     p: 0,
+//                     color: "#fff",
+//                     justifyContent: "flex-start",
+//                     letterSpacing: "0.12em",
+//                     "&:hover": { bgcolor: "transparent", color: "#dbc6a3" },
+//                   }}
+//                 >
+//                   Learn More
+//                 </Button>
+//               </Box>
+//             </Grid>
+//           ))}
+//         </Grid>
+//       </Container>
+//     </Box>

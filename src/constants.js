@@ -8,7 +8,7 @@ const weddings = [
 
 const pages = [
     { label: 'Home', path: '/'},
-    { label: 'Gallery', path: null},
+    { label: 'Gallery', path: '/gallery'},
     { label: 'About Us', path: '/about-us' },
     { label: 'Contact Us', path: '/contact-us' },
     { label: 'Weddings', path: null, children: weddings}

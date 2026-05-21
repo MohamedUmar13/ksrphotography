@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Card,
     CardContent,
@@ -12,6 +12,10 @@ import { Camera, Heart, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function AboutUsPage() {
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
     // 🔥 Custom Cursor
     const [pos, setPos] = React.useState({ x: 0, y: 0 });
@@ -226,60 +230,60 @@ export default function AboutUsPage() {
                 </div>
 
                 {/* TIMELINE */}
-<Box className="relative w-full">
+                <Box className="relative w-full">
 
-  {/* DESKTOP LINE */}
-  <Box className="hidden md:block absolute top-5 left-0 w-full h-[1px] bg-gray-700" />
+                    {/* DESKTOP LINE */}
+                    <Box className="hidden md:block absolute top-5 left-0 w-full h-[1px] bg-gray-700" />
 
-  <Grid container spacing={4} justifyContent="space-between">
+                    <Grid container spacing={4} justifyContent="space-between">
 
-    {[
-      { title: "Vision", desc: "Understanding your story." },
-      { title: "Session", desc: "Capturing real moments." },
-      { title: "Gallery", desc: "Delivering timeless visuals." },
-    ].map((item, i) => (
+                        {[
+                            { title: "Vision", desc: "Understanding your story." },
+                            { title: "Session", desc: "Capturing real moments." },
+                            { title: "Gallery", desc: "Delivering timeless visuals." },
+                        ].map((item, i) => (
 
-      <Grid
-        item
-        xs={12}
-        md={4}
-        key={i}
-        className="relative text-center md:text-center flex md:block items-start md:items-center"
-      >
+                            <Grid
+                                item
+                                xs={12}
+                                md={4}
+                                key={i}
+                                className="relative text-center md:text-center flex md:block items-start md:items-center"
+                            >
 
-        {/* MOBILE LINE */}
-        <Box className="md:hidden absolute left-2 top-0 bottom-0 w-[1px] bg-gray-700" />
+                                {/* MOBILE LINE */}
+                                <Box className="md:hidden absolute left-2 top-0 bottom-0 w-[1px] bg-gray-700" />
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex md:flex-col items-start md:items-center gap-4 md:gap-0"
-        >
+                                <motion.div
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="flex md:flex-col items-start md:items-center gap-4 md:gap-0"
+                                >
 
-          {/* DOT */}
-          <Box className="w-4 h-4 bg-white rounded-full z-10 mt-1 md:mb-4" />
+                                    {/* DOT */}
+                                    <Box className="w-4 h-4 bg-white rounded-full z-10 mt-1 md:mb-4" />
 
-          {/* TEXT */}
-          <Box>
-            <Typography variant="h6">
-              {item.title}
-            </Typography>
+                                    {/* TEXT */}
+                                    <Box>
+                                        <Typography variant="h6">
+                                            {item.title}
+                                        </Typography>
 
-            <Typography className="text-gray-400 text-sm max-w-[220px]">
-              {item.desc}
-            </Typography>
-          </Box>
+                                        <Typography className="text-gray-400 text-sm max-w-[220px]">
+                                            {item.desc}
+                                        </Typography>
+                                    </Box>
 
-        </motion.div>
+                                </motion.div>
 
-      </Grid>
+                            </Grid>
 
-    ))}
+                        ))}
 
-  </Grid>
+                    </Grid>
 
-</Box>
+                </Box>
             </Container>
 
         </Box>
