@@ -7,6 +7,8 @@ import Hindu from "../pages/weddings/Hindu";
 import Engagement from "../pages/weddings/Engagement";
 import ContactUs from "../pages/ContactUs";
 import HomePage from "../pages/HomePage";
+import Gallery from "../pages/Gallery";
+import SpecifiedEvent from "../pages/SpecifiedEvent";
 
 export default function AppRoutes() {
     return (
@@ -19,6 +21,8 @@ export default function AppRoutes() {
             <Route path="/engagement" element={<Engagement />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/specified-event/:imgId" element={<SpecifiedEvent />} />
         </Routes>
     );
 }

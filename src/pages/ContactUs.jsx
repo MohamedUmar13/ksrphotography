@@ -1,10 +1,14 @@
 import { Button, TextField, Typography, Box } from "@mui/material";
 import FollowUs from "../components/FollowUs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import emailjs from "@emailjs/browser";
 
 export default function ContactUs() {
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
     const [name, setName] = useState('');
     const [mail, setMail] = useState('');
@@ -137,7 +141,7 @@ export default function ContactUs() {
                             Monday – Saturday
                         </Typography>
                         <Typography sx={{ opacity: 0.9 }}>
-                            10:00 AM – 9:00 PM
+                            10:00 AM – 8:00 PM
                         </Typography>
                     </Box>
 

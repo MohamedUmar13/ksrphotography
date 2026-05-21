@@ -28,20 +28,19 @@ export default function ImageSliderComponent({ images }) {
     }, []);
 
     return (
-        <div className='flex items-center flex-col justify-center bg-[#0a0a0a] h-[60vh] md:h-screen '>
-            {images.map((image, index) => (
-                <motion.img
-                    key={index}
-                    src={image}
-                    alt={image}
-                    className="absolute rounded-[12px] 
+        <div className='relative flex items-center flex-col justify-center bg-[#0a0a0a] h-[50vh] md:h-screen overflow-hidden'>            {images.map((image, index) => (
+            <motion.img
+                key={index}
+                src={image}
+                alt={image}
+                className="absolute rounded-[12px] 
                     w-[85%] sm:w-[70%] md:w-[50%] lg:w-[40%]"
-                    initial="center"
-                    animate={positions[positionIndexes[index]]}
-                    variants={imageVariants}
-                    transition={{ duration: 0.5 }}
-                />
-            ))}
+                initial="center"
+                animate={positions[positionIndexes[index]]}
+                variants={imageVariants}
+                transition={{ duration: 0.5 }}
+            />
+        ))}
         </div>
     )
 }
