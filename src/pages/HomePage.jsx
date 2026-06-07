@@ -1,10 +1,13 @@
 import { Box, Button, Container, Divider, Grid, Stack, Typography } from "@mui/material";
 import { ArrowRight, Award, Camera, Image as ImageIcon, Mail, Users } from "lucide-react";
-import heroImage from "../assets/images/hero-home.jpg";
 import { useNavigate } from "react-router-dom";
 import Counter from "../components/Counter";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import ReviewJournal from "./Reviews";
+import { getDirectDriveLink } from "../helpers";
 
 const stats = [
   { label: "Shoots Completed", value: 250, icon: Camera },
@@ -56,6 +59,18 @@ export default function HomePage() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const fetchImage = async () => {
+      const docRef = doc(db, "Pages", "HOME");
+
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setImageData(docSnap.data());
+      }
+    };
+
+    fetchImage();
   }, []);
 
   const navigate = useNavigate();
@@ -86,6 +101,7 @@ export default function HomePage() {
     y.set(0);
   };
 
+  const [imageData, setImageData] = useState(null);
 
   return (
     <Box
@@ -103,7 +119,7 @@ export default function HomePage() {
           position: "relative",
           minHeight: { xs: "auto", md: "100vh" },
           color: "#fff",
-          backgroundImage: `linear-gradient(90deg, rgba(11, 11, 11, 0.78) 0%, rgba(11, 11, 11, 0.48) 45%, rgba(11, 11, 11, 0.3) 100%), url(${heroImage})`,
+          backgroundImage: `linear-gradient(90deg, rgba(11, 11, 11, 0.78) 0%, rgba(11, 11, 11, 0.48) 45%, rgba(11, 11, 11, 0.3) 100%), url(${getDirectDriveLink(imageData?.coverImage)}) `, 
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -317,7 +333,7 @@ export default function HomePage() {
             >
               <Box
                 component="img"
-                src={heroImage}
+                src={getDirectDriveLink(imageData?.centerImage)}
                 alt="Editorial portrait preview"
                 sx={{
                   width: "100%",
@@ -458,7 +474,7 @@ export default function HomePage() {
             <Grid item xs={12} md={5}>
               <Box
                 component="img"
-                src={heroImage}
+                src={getDirectDriveLink(imageData?.bottomImage)}
                 alt="Photography showcase"
                 sx={{
                   width: "100%",
@@ -469,6 +485,8 @@ export default function HomePage() {
                 }}
               />
             </Grid>
+
+            <ReviewJournal />
           </Grid>
         </Box>
       </Container>
@@ -476,97 +494,6 @@ export default function HomePage() {
   );
 }
 
-{/* <Grid container spacing={2.5}>
-              {highlights.map((item) => (
-                <Grid item xs={12} sm={4} key={item.title}>
-                  <Box
-                    sx={{
-                      height: "100%",
-                      p: 2.5,
-                      borderRadius: 4,
-                      border: "1px solid rgba(23,23,23,0.08)",
-                      bgcolor: "rgba(255,255,255,0.56)",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: 700, mb: 1.2 }}>{item.title}</Typography>
-                    <Typography sx={{ color: "rgba(23,23,23,0.66)", lineHeight: 1.8, fontSize: "0.95rem" }}>
-                      {item.description}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid> */}
 
-// <Box sx={{ bgcolor: "#171717", py: { xs: 10, md: 14 } }}>
-//       <Container maxWidth="xl">
-//         <Stack spacing={2} sx={{ textAlign: "center", mb: 7 }}>
-//           <Typography sx={{ color: "#dbc6a3", letterSpacing: "0.3em", fontSize: "0.76rem" }}>
-//             SERVICES
-//           </Typography>
-//           <Typography
-//             sx={{
-//               fontFamily: "'Playfair Display', serif",
-//               fontSize: { xs: "2.2rem", md: "3.8rem" },
-//               lineHeight: 1.05,
-//             }}
-//           >
-//             Distinct photography for meaningful milestones and modern brands.
-//           </Typography>
-//           <Typography
-//             sx={{
-//               maxWidth: 760,
-//               mx: "auto",
-//               color: "rgba(255,255,255,0.7)",
-//               lineHeight: 1.9,
-//             }}
-//           >
-//             Whether you are celebrating a once-in-a-lifetime event or shaping a strong
-//             visual identity, the experience is tailored to feel seamless and premium.
-//           </Typography>
-//         </Stack>
 
-//         <Grid container spacing={3}>
-//           {services.map((service) => (
-//             <Grid item xs={12} md={4} key={service.title}>
-//               <Box
-//                 sx={{
-//                   height: "100%",
-//                   p: { xs: 3, md: 4 },
-//                   borderRadius: 6,
-//                   border: "1px solid rgba(255,255,255,0.08)",
-//                   background:
-//                     "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-//                   transition: "transform 250ms ease, border-color 250ms ease",
-//                   "&:hover": {
-//                     transform: "translateY(-6px)",
-//                     borderColor: "rgba(219,198,163,0.45)",
-//                   },
-//                 }}
-//               >
-//                 <Typography sx={{ color: "#dbc6a3", fontSize: "0.85rem", letterSpacing: "0.24em", mb: 3 }}>
-//                   {service.number}
-//                 </Typography>
-//                 <Typography sx={{ fontSize: "1.45rem", fontWeight: 600, mb: 2 }}>
-//                   {service.title}
-//                 </Typography>
-//                 <Typography sx={{ color: "rgba(255,255,255,0.68)", lineHeight: 1.9, mb: 4 }}>
-//                   {service.description}
-//                 </Typography>
-//                 <Button
-//                   endIcon={<ArrowRight size={16} />}
-//                   sx={{
-//                     p: 0,
-//                     color: "#fff",
-//                     justifyContent: "flex-start",
-//                     letterSpacing: "0.12em",
-//                     "&:hover": { bgcolor: "transparent", color: "#dbc6a3" },
-//                   }}
-//                 >
-//                   Learn More
-//                 </Button>
-//               </Box>
-//             </Grid>
-//           ))}
-//         </Grid>
-//       </Container>
-//     </Box>
+

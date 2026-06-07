@@ -8,7 +8,9 @@ export default function BottomBar() {
 
     const quickLinks = [
         { label: 'Home', path: '/' },
-        { label: 'Contact us', path: '/about-us' }
+        { label: 'Gallery', path: '/gallery' },
+        { label: 'About us', path: '/about-us' },
+        { label: 'Contact us', path: '/contact-us' },
     ];
 
     return (

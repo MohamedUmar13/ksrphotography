@@ -2,17 +2,35 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import GalleryCard from "./GalleryCard";
 import { useParams } from "react-router-dom";
-import photos from "./photos";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { getDirectDriveLink } from "../helpers";
 
 export default function SpecifiedEvent() {
 
+  const { imgId } = useParams();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+
+    const fetchEvent = async () => {
+      const docRef = doc(db, "Gallery", imgId);
+
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setWeddingData(docSnap.data());
+      }
+    };
+
+    fetchEvent();
+  }, [imgId]);
+
+  const [weddingData, setWeddingData] = useState(null);
 
   const getLayoutClass = (layout) => {
     switch (layout) {
@@ -28,11 +46,14 @@ export default function SpecifiedEvent() {
   };
 
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const { imgId } = useParams();
 
-  const filteredPhotos = photos.filter(
-    (photo) => photo.imgId === imgId
-  );
+  const filteredPhotos =
+    weddingData?.allImages?.map((image, index) => ({
+      id: index,
+      src: getDirectDriveLink(image),
+      title: weddingData?.name,
+      category: weddingData?.category,
+    })) || [];
 
   const selectedPhoto = selectedIndex !== null ? filteredPhotos[selectedIndex] : null;
 
@@ -120,6 +141,28 @@ export default function SpecifiedEvent() {
                     <CloseIcon fontSize="large" />
                   </IconButton>
                 </motion.div>
+              </div>
+
+              <div className="md:hidden absolute top-4 right-4 z-50">
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedIndex(null);
+                  }}
+                  sx={{
+                    color: "white",
+                    width: 56,
+                    height: 56,
+                    backgroundColor: "rgba(255,255,255,0.08)",
+                    backdropFilter: "blur(12px)",
+
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.16)",
+                    },
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
               </div>
 
               {/* Previous Button */}

@@ -27,14 +27,14 @@ export default function ContactUs() {
 
         try {
             await emailjs.send(
-                "service_vabzpmf",
-                "template_dl2l6pk",
+                import.meta.env.VITE_EMAIL_JS_SERVICE_ID,
+                import.meta.env.VITE_EMAIL_JS_TEMPLATE_ID,
                 {
                     name: name,
                     email: mail,
                     message: message
                 },
-                "cbQCuBRnuvvls62eK"
+                import.meta.env.VITE_EMAIL_JS_PUBLIC_KEY
             );
 
             alert("Message sent successfully");
