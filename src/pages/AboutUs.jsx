@@ -1,291 +1,275 @@
-import React, { useEffect } from "react";
-import {
-    Card,
-    CardContent,
-    Typography,
-    Box,
-    Grid,
-    Container,
-} from "@mui/material";
-import aboutUs from "../assets/images/about-us.png";
-import { Camera, Heart, ShieldCheck } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Camera, Heart, Sparkles } from "lucide-react";
+import FastImage from "../components/FastImage";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { getDirectDriveLink } from "../helpers";
 
 export default function AboutUsPage() {
 
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
-    // 🔥 Custom Cursor
-    const [pos, setPos] = React.useState({ x: 0, y: 0 });
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
-    React.useEffect(() => {
-        const move = (e) => setPos({ x: e.clientX, y: e.clientY });
-        window.addEventListener("mousemove", move);
-        return () => window.removeEventListener("mousemove", move);
-    }, []);
+    const fetchAboutPage = async () => {
+      const docRef = doc(db, "Pages", "ABOUT-US");
 
-    return (
-        <Box className="w-full bg-[#0a0a0a] text-white overflow-hidden">
+      const docSnap = await getDoc(docRef);
 
-            {/* CUSTOM CURSOR */}
-            <Box
-                className="fixed top-0 left-0 w-5 h-5 rounded-full bg-white mix-blend-difference pointer-events-none z-50"
-                style={{
-                    transform: `translate(${pos.x}px, ${pos.y}px)`,
-                }}
+      if (docSnap.exists()) {
+
+        const data = docSnap.data();
+
+        setAboutUsData(data);
+
+        console.log("Firestore Data:", data);
+
+        console.log(
+          "Converted URL:",
+          getDirectDriveLink(data.coverImage)
+        );
+
+      }
+    };
+
+    fetchAboutPage();
+  }, []);
+
+  const [aboutUsData, setAboutUsData] = useState(null);
+
+  // Custom Cursor (Smooth)
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = React.useState(false);
+
+  useEffect(() => {
+    const updateMousePosition = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", updateMousePosition);
+    return () => window.removeEventListener("mousemove", updateMousePosition);
+  }, []);
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+  return (
+    <div ref={containerRef} className="bg-zinc-950 text-zinc-100 min-h-screen selection:bg-zinc-800 selection:text-white font-sans overflow-hidden">
+
+      {/* Custom Cursor */}
+      <motion.div
+        className="fixed top-0 left-0 w-4 h-4 bg-white rounded-full mix-blend-difference pointer-events-none z-50 items-center justify-center hidden md:flex"
+        animate={{
+          x: mousePosition.x - 8,
+          y: mousePosition.y - 8,
+          scale: isHovering ? 2.5 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      />
+
+      {/* HERO SECTION */}
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <motion.div style={{ y }} className="w-full h-full origin-top">
+            <FastImage
+              src={aboutUsData?.coverImage}
+              alt="Studio"
+              className="w-full h-[120%] object-cover opacity-40 brightness-75 grayscale-[30%]"
             />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+        </div>
 
-            {/* HERO */}
-            <Box className="relative h-[90vh] w-full overflow-hidden">
-                <img
-                    src={aboutUs}
-                    alt="Hero"
-                    className="absolute w-full h-full object-cover scale-110"
-                />
+        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tighter mb-6">
+              Capturing the <br />
+              <span className="italic font-serif text-zinc-400">Invisible</span>
+            </h1>
+            <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto font-light leading-relaxed">
+              We don't just take photographs. We preserve the fleeting poetry of human connection, turning transient moments into timeless legacy.
+            </p>
+          </motion.div>
+        </div>
 
-                <Box className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 flex items-center justify-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 80 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
-                        className="text-center px-6"
-                    >
-                        <Typography
-                            variant="h2"
-                            sx={{ fontFamily: "'Playfair Display', serif" }}
-                            className="mb-4"
-                        >
-                            Capturing Stories Through Light
-                        </Typography>
+        <motion.div
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-500"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+        >
+          <span className="text-xs tracking-widest uppercase">Scroll to explore</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-500 to-transparent" />
+        </motion.div>
+      </section>
 
-                        <Typography className="text-gray-300 max-w-xl mx-auto text-lg">
-                            Every frame tells a story. Every moment becomes timeless.
-                        </Typography>
-                    </motion.div>
-                </Box>
-            </Box>
+      {/* PHILOSOPHY SECTION */}
+      <section className="py-32 px-6 md:px-12 max-w-[90rem] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
 
-            {/* FULLSCREEN IMAGE TRANSITION */}
-            <Box className="h-screen w-full overflow-hidden">
-                <motion.img
-                    src={aboutUs}
-                    className="w-full h-full object-cover"
-                    initial={{ scale: 1.2 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ duration: 1.5 }}
-                />
-            </Box>
+          <div className="lg:col-span-5 lg:col-start-2 space-y-12">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl md:text-5xl font-light leading-tight mb-8">
+                The Art of <br />
+                <span className="italic font-serif text-zinc-400">Observation</span>
+              </h2>
+              <div className="space-y-6 text-zinc-400 text-lg font-light leading-relaxed">
+                <p>
+                  At KSR Photography, our approach is rooted in quiet observation. We believe the most profound images are found in the spaces between formal poses—a stolen glance, a nervous breath, a sudden burst of genuine laughter.
+                </p>
+                <p>
+                  With an editorial eye and a documentary heart, we blend into the background to capture the authentic narrative of your day. The result is a curated collection of visual memories that feel as real as they did in the moment.
+                </p>
+              </div>
+            </motion.div>
+          </div>
 
-            {/* ABOUT */}
-            <Container maxWidth="md" className="py-32 text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 80 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                >
-                    <Typography
-                        variant="h4"
-                        sx={{ fontFamily: "'Playfair Display', serif" }}
-                        className="mb-6"
-                    >
-                        The Art Behind Every Frame
-                    </Typography>
+          <div className="lg:col-span-5 lg:col-start-8">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="relative aspect-[3/4] rounded-sm overflow-hidden"
+            >
+              <FastImage src={aboutUsData?.philosophyImage} alt="Philosophy" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+            </motion.div>
+          </div>
 
-                    <Typography className="text-gray-400 leading-relaxed">
-                        At KSR Photography, we believe every moment holds a story waiting to
-                        be told. We blend technical precision with real emotion to capture
-                        images that feel alive.
-                        <br /><br />
-                        Whether it's a quiet glance or a powerful celebration, our goal is
-                        simple — create visuals that stay with you forever.
-                    </Typography>
-                </motion.div>
-            </Container>
+        </div>
+      </section>
 
-            {/* PHOTOGRAPHER */}
-            <Container maxWidth="lg" className="py-24">
-                <Grid container spacing={10} alignItems="center">
+      {/* APPROACH CARDS / LIST */}
+      <section className="py-32 bg-zinc-900/30 border-y border-zinc-800/50 relative overflow-hidden">
+        {/* Subtle ambient light */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-800/10 rounded-full blur-[120px] pointer-events-none" />
 
-                    <Grid item xs={12} md={6}>
-                        <motion.div
-                            initial={{ opacity: 0, x: -80 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1 }}
-                        >
-                            <Box className="relative">
-                                <img
-                                    src={aboutUs}
-                                    alt="Photographer"
-                                    className="rounded-xl shadow-[0_20px_80px_rgba(0,0,0,0.6)] w-full grayscale hover:grayscale-0 transition duration-700"
-                                />
-                                <Box className="absolute -bottom-5 -right-5 w-full h-full border border-gray-800 -z-10" />
-                            </Box>
-                        </motion.div>
-                    </Grid>
+        <div className="max-w-[90rem] mx-auto px-6 md:px-12 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mb-20 text-center"
+          >
+            <span className="text-xs uppercase tracking-[0.3em] text-zinc-500 font-medium block mb-4">
+              Core Values
+            </span>
+            <h2 className="text-4xl md:text-5xl font-light">Our <span className="italic font-serif text-zinc-400">Pillars</span></h2>
+          </motion.div>
 
-                    <Grid item xs={12} md={6}>
-                        <motion.div
-                            initial={{ opacity: 0, x: 80 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1 }}
-                        >
-                            <Typography className="uppercase tracking-widest text-gray-500 text-sm">
-                                Meet the Photographer
-                            </Typography>
-
-                            <Typography
-                                variant="h4"
-                                sx={{ fontFamily: "'Playfair Display', serif" }}
-                                className="mt-2 mb-6"
-                            >
-                                The Eye Behind the Lens
-                            </Typography>
-
-                            <Typography className="text-gray-400 leading-loose mb-4">
-                                My journey began with curiosity — how light shapes emotion.
-                            </Typography>
-
-                            <Typography className="text-gray-400 leading-loose">
-                                Today, I capture real, unplanned moments that matter the most.
-                            </Typography>
-                        </motion.div>
-                    </Grid>
-
-                </Grid>
-            </Container>
-
-            {/* PREMIUM CARDS */}
-            <Box className="bg-[#111] py-24">
-                <Container maxWidth="lg" className="!max-w-6xl">
-                    <Grid container spacing={4} justifyContent="center">
-                        {[
-                            {
-                                title: "Authenticity First",
-                                desc: "Real emotions over poses.",
-                                icon: <Heart size={30} />,
-                            },
-                            {
-                                title: "Technical Excellence",
-                                desc: "Professional gear and editing.",
-                                icon: <ShieldCheck size={30} />,
-                            },
-                            {
-                                title: "Creative Partnership",
-                                desc: "We bring your vision to life.",
-                                icon: <Camera size={30} />,
-                            },
-                        ].map((item, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index} className="flex justify-center">
-
-                                <motion.div
-                                    whileHover={{ y: -12, scale: 1.03 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <Card className="w-full max-w-[320px] h-full flex flex-col border border-gray-800 rounded-2xl bg-[#111] hover:bg-[#1a1a1a] relative overflow-hidden">
-
-                                        {/* Glow */}
-                                        <Box className="absolute inset-0 opacity-0 hover:opacity-100 transition duration-500 bg-gradient-to-br from-white/10 to-transparent" />
-
-                                        <CardContent className="p-8 text-center flex flex-col flex-grow relative z-10">
-
-                                            <Box className="mb-4 text-gray-500 flex justify-center group-hover:scale-110 transition">
-                                                {item.icon}
-                                            </Box>
-
-                                            <Typography variant="h6" className="mb-2">
-                                                {item.title}
-                                            </Typography>
-
-                                            <Typography className="text-gray-400 flex-grow">
-                                                {item.desc}
-                                            </Typography>
-
-                                        </CardContent>
-                                    </Card>
-                                </motion.div>
-
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Container>
-            </Box>
-
-            {/* PROCESS */}
-            <Container maxWidth="lg" className="py-10">
-
-                <Typography
-                    variant="h4"
-                    sx={{ fontFamily: "'Playfair Display', serif" }}
-                    className="text-center mb-4"
-                >
-                    The Journey
-                </Typography>
-
-                <div className="w-full flex justify-center pt-5 pb-8">
-                    <Typography className="text-gray-400 text-center max-w-xl mx-auto mb-16">
-                        From idea to final delivery, every step is crafted to give you a seamless and memorable experience.
-                    </Typography>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {[
+              {
+                icon: <Heart strokeWidth={1} className="w-8 h-8" />,
+                title: "Authentic Emotion",
+                desc: "We prioritize feeling over perfection. True beauty lies in the raw, unscripted moments."
+              },
+              {
+                icon: <Camera strokeWidth={1} className="w-8 h-8" />,
+                title: "Editorial Aesthetic",
+                desc: "Drawing inspiration from high fashion and cinema to deliver timeless, elevated visuals."
+              },
+              {
+                icon: <Sparkles strokeWidth={1} className="w-8 h-8" />,
+                title: "Unobtrusive Presence",
+                desc: "We document your story gracefully, allowing you to remain fully present in your experience."
+              }
+            ].map((pillar, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                className="p-8 border border-zinc-800/60 bg-zinc-900/20 backdrop-blur-sm rounded-[2rem] group hover:border-zinc-600 hover:bg-zinc-800/40 transition-all duration-500"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                <div className="text-zinc-500 group-hover:text-zinc-300 transition-colors duration-500 mb-6">
+                  {pillar.icon}
                 </div>
+                <h3 className="text-xl font-medium mb-4 text-zinc-200">{pillar.title}</h3>
+                <p className="text-zinc-400 font-light leading-relaxed">{pillar.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                {/* TIMELINE */}
-                <Box className="relative w-full">
+      {/* THE PROCESS */}
+      <section className="py-32 px-6 md:px-12 max-w-[90rem] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
-                    {/* DESKTOP LINE */}
-                    <Box className="hidden md:block absolute top-5 left-0 w-full h-[1px] bg-gray-700" />
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="text-xs uppercase tracking-[0.3em] text-zinc-500 font-medium block mb-4">
+              Our Process
+            </span>
+            <h2 className="text-4xl md:text-5xl font-light mb-8">The <span className="italic font-serif text-zinc-400">Experience</span></h2>
+            <p className="text-zinc-400 text-lg font-light leading-relaxed mb-12">
+              From our first conversation to the delivery of your final gallery, every step is intentionally designed to be seamless, collaborative, and inspiring.
+            </p>
 
-                    <Grid container spacing={4} justifyContent="space-between">
+            <div className="space-y-10">
+              {[
+                { step: "01", title: "Connection", desc: "We begin by understanding your vision, aesthetic preferences, and the unique dynamics of your story." },
+                { step: "02", title: "Curation", desc: "On the day, we artfully capture the unfolding narrative, balancing directed portraits with spontaneous documentary." },
+                { step: "03", title: "Creation", desc: "Each image is meticulously edited in our signature style, resulting in a cohesive, cinematic collection." }
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-6 group cursor-default" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+                  <div className="text-sm font-medium text-zinc-600 group-hover:text-zinc-300 transition-colors pt-1 font-serif italic">
+                    {item.step}
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-medium text-zinc-200 mb-2">{item.title}</h4>
+                    <p className="text-zinc-400 font-light leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
-                        {[
-                            { title: "Vision", desc: "Understanding your story." },
-                            { title: "Session", desc: "Capturing real moments." },
-                            { title: "Gallery", desc: "Delivering timeless visuals." },
-                        ].map((item, i) => (
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-900 relative group">
+              <div className="absolute inset-0 bg-black/20 z-10 group-hover:bg-transparent transition-colors duration-700" />
+              <FastImage
+                src={aboutUsData?.processImage}
+                alt="Process"
+                className="w-full h-full object-cover object-right opacity-80 group-hover:scale-105 transition-transform duration-1000"
+              />
+            </div>
+            {/* Decorative elements */}
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 border-l border-b border-zinc-700 pointer-events-none hidden md:block rounded-bl-[2rem]" />
+            <div className="absolute -top-6 -right-6 w-32 h-32 border-r border-t border-zinc-700 pointer-events-none hidden md:block rounded-tr-[2rem]" />
+          </motion.div>
 
-                            <Grid
-                                item
-                                xs={12}
-                                md={4}
-                                key={i}
-                                className="relative text-center md:text-center flex md:block items-start md:items-center"
-                            >
+        </div>
+      </section>
 
-                                {/* MOBILE LINE */}
-                                <Box className="md:hidden absolute left-2 top-0 bottom-0 w-[1px] bg-gray-700" />
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="flex md:flex-col items-start md:items-center gap-4 md:gap-0"
-                                >
-
-                                    {/* DOT */}
-                                    <Box className="w-4 h-4 bg-white rounded-full z-10 mt-1 md:mb-4" />
-
-                                    {/* TEXT */}
-                                    <Box>
-                                        <Typography variant="h6">
-                                            {item.title}
-                                        </Typography>
-
-                                        <Typography className="text-gray-400 text-sm max-w-[220px]">
-                                            {item.desc}
-                                        </Typography>
-                                    </Box>
-
-                                </motion.div>
-
-                            </Grid>
-
-                        ))}
-
-                    </Grid>
-
-                </Box>
-            </Container>
-
-        </Box>
-    );
+    </div>
+  );
 }

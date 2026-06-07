@@ -3,13 +3,35 @@ import { useEffect, useState } from "react";
 import { Chip, Stack } from "@mui/material";
 import GalleryCard from "./GalleryCard";
 import { useNavigate } from "react-router-dom";
-import photos from "./photos";
+import { collection, doc, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import { getDirectDriveLink } from "../helpers";
 
 export default function Gallery() {
 
-    useEffect(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const fetchEvent = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "Gallery"));
+
+        const galleryData = querySnapshot.docs.map((doc, index) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setPhotos(galleryData);
+
+      } catch (error) {
+        console.log("Error fetching gallery:", error);
+      }
+    };
+
+    fetchEvent();
+  }, []);
 
   const getLayoutClass = (layout) => {
     switch (layout) {
@@ -24,19 +46,19 @@ export default function Gallery() {
     }
   };
 
-const layoutOptions = [
-  "standard",
-  "standard",
-  "standard",
-  "v-stretch",
-  "h-stretch",
-];
-
-const getAutoLayout = () => {
-  return layoutOptions[
-    Math.floor(Math.random() * layoutOptions.length)
+  const layoutOptions = [
+    "standard",
+    "standard",
+    "standard",
+    "v-stretch",
+    "h-stretch",
   ];
-};
+
+  const getAutoLayout = () => {
+    return layoutOptions[
+      Math.floor(Math.random() * layoutOptions.length)
+    ];
+  };
 
   const categories = ["All", ...new Set(photos.map((p) => p.category))];
 
@@ -119,10 +141,13 @@ const getAutoLayout = () => {
               key={photo.id}
               photo={{
                 ...photo,
-              layout: getAutoLayout()}}
+                src: getDirectDriveLink(photo.coverImage),
+                title: photo.name,
+                layout: getAutoLayout(),
+              }}
               getLayoutClass={getLayoutClass}
               onClick={() => {
-                navigate(`/specified-event/${photo.imgId}`);
+                navigate(`/specified-event/${photo.id}`);
               }}
             />
           ))}
@@ -131,42 +156,3 @@ const getAutoLayout = () => {
     </div>
   );
 }
-
-            // <motion.div
-            //   key={photo.id}
-            //   initial={{ opacity: 0, y: 40 }}
-            //   whileInView={{ opacity: 1, y: 0 }}
-            //   transition={{
-            //     duration: 0.7,
-            //     delay: index * 0.05,
-            //   }}
-            //   viewport={{ once: false }}
-            //   className={`group relative overflow-hidden rounded-2xl bg-neutral-900 ${getLayoutClass(
-            //     photo.layout
-            //   )}`}
-            //   onClick={() => {console.log('clicked')}}
-            // >
-            //   {/* Image */}
-            //   <motion.img
-            //     src={photo.src}
-            //     alt={photo.title}
-            //     loading="lazy"
-            //     className="w-full h-full object-cover"
-            //     whileHover={{ scale: 1.05 }}
-            //     transition={{ duration: 0.6 }}                
-            //   />
-
-            //   {/* Dark overlay */}
-            //   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition duration-500" />
-
-            //   {/* Content */}
-            //   <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-10 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition duration-500">
-            //     <p className="text-white/70 text-sm uppercase tracking-widest">
-            //       {photo.category}
-            //     </p>
-
-            //     <h2 className="text-white text-xl font-light mt-1">
-            //       {photo.title}
-            //     </h2>
-            //   </div>
-            // </motion.div>

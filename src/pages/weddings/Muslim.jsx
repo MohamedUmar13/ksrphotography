@@ -1,29 +1,37 @@
-import image1 from "../../assets/images/muslim/muslimwedding1.jpg";
-import image2 from "../../assets/images/muslim/muslimwedding2.jpeg";
-import image3 from "../../assets/images/muslim/muslimwedding3.jpg";
-import image4 from "../../assets/images/muslim/muslimwedding4.jpg";
-import image5 from "../../assets/images/muslim/muslimwedding5.jpg";
-import image6 from "../../assets/images/muslim/muslimwedding6.jpg";
-import image7 from "../../assets/images/muslim/muslimwedding7.jpg";
-import image8 from "../../assets/images/muslim/muslimwedding8.jpg";
-import image9 from "../../assets/images/muslim/muslimwedding9.jpg";
 import { motion } from "framer-motion";
 import ImageSliderComponent from "../../components/ImageSliderComponent";
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { getDirectDriveLink } from "../../helpers";
+import FastImage from "../../components/FastImage";
 
 export default function Muslim() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const fetchWedding = async () => {
+      const docRef = doc(db, "Weddings", "Muslim");
+
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setWeddingData(docSnap.data());
+      }
+    };
+
+    fetchWedding();
   }, []);
+
+  const [weddingData, setWeddingData] = useState(null);
 
   return (
     <>
       {/* HERO */}
       <section
         className="relative h-screen w-full bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: `url(${image1})` }}
+        style={{ backgroundImage: `url(${getDirectDriveLink(weddingData?.coverImage)})` }}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative text-center text-white max-w-3xl px-6">
@@ -43,11 +51,11 @@ export default function Muslim() {
           {/* IMAGE — Dominant */}
           <div className="relative">
             <div className="rounded-[2rem] overflow-hidden shadow-2xl">
-              <img
-                src={image2}
-                alt="Muslim wedding photography"
-                className="w-full h-[120vh] object-cover"
-              />
+                <FastImage
+                  src={weddingData?.portrayImage}
+                  alt="Muslim wedding photography"
+                  className="w-full h-[120vh] object-cover"
+                />
             </div>
           </div>
 
@@ -140,18 +148,18 @@ export default function Muslim() {
             viewport={{ once: true }}
           >
             {/* Back image */}
-            <img
-              src={image3}
-              alt=""
-              className="absolute right-0 top-0 w-[65%] h-[85%] object-cover rounded-[2.5rem] shadow-xl"
-            />
+              <FastImage
+                src={weddingData?.twinImage?.[0]}
+                alt=""
+                className="absolute right-0 top-0 w-[65%] h-[85%] object-cover rounded-[2.5rem] shadow-xl"
+              />
 
             {/* Front image */}
-            <img
-              src={image4}
-              alt=""
-              className="absolute left-0 bottom-0 w-[55%] h-[70%] object-cover rounded-[2.5rem] shadow-2xl"
-            />
+              <FastImage
+                src={weddingData?.twinImage?.[1]}
+                alt=""
+                className="absolute left-0 bottom-0 w-[55%] h-[70%] object-cover rounded-[2.5rem] shadow-2xl"
+              />
 
           </motion.div>
 
@@ -200,7 +208,7 @@ export default function Muslim() {
         </div>
       </section>
 
-      <ImageSliderComponent images={[image5, image6, image7, image8, image9]} />
+      <ImageSliderComponent images={weddingData?.carouselImages?.map(getDirectDriveLink) || []} />
 
     </>
   );
