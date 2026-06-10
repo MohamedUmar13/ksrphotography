@@ -36,10 +36,14 @@ export const getDirectDriveLink = (url) => {
     if (genericMatch && genericMatch[1]) {
         return `https://drive.google.com/thumbnail?id=${genericMatch[1]}&sz=w1080`;
     }
-    // Direct Googleusercontent image
-    if (url.includes('lh3.googleusercontent.com')) return url;
     // Direct image URL (ends with common extension)
     if (/(\.jpg|\.jpeg|\.png|\.webp|\.gif)$/i.test(url)) return url;
-    // If none of the patterns match, just return the original URL – it may already be a valid image link
-    return url; // fallback to original URL for unknown patterns
+    // If none matched, attempt to construct a public Googleusercontent URL if an ID is present
+    const idMatch = url.match(/([a-zA-Z0-9_-]{10,})/);
+    if (idMatch && idMatch[1]) {
+        const publicUrl = `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
+        return publicUrl;
+    }
+    // Fallback to placeholder for unknown patterns
+    return PLACEHOLDER_IMG;
 };

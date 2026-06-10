@@ -6,69 +6,10 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getDirectDriveLink } from "../helpers";
 
-const reviews = [
-  {
-    id: 1,
-    clientName: "Aarav & Meera",
-    category: "Temple Wedding",
-    quote:
-      "Every frame felt like it belonged in a timeless film. Nothing felt posed, yet everything looked beautiful.",
-    image:
-      "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop",
-    size: "portrait",
-  },
-
-  {
-    id: 2,
-    clientName: "Diya Raman",
-    category: "Editorial Portrait",
-    quote:
-      "The photographs carried emotion in a way words simply cannot.",
-    image:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop",
-    size: "landscape",
-  },
-
-  {
-    id: 3,
-    clientName: "Vikram Studio",
-    category: "Architecture",
-    quote:
-      "The eye for light and composition transformed our entire visual identity.",
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
-    size: "square",
-  },
-
-  {
-    id: 4,
-    clientName: "Nila & Arjun",
-    category: "Beach Wedding",
-    quote:
-      "Looking through the gallery felt like reliving the day itself.",
-    image:
-      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop",
-    size: "portrait",
-  },
-
-  {
-    id: 5,
-    clientName: "Ananya",
-    category: "Fashion Editorial",
-    quote:
-      "Elegant, cinematic, and deeply personal. Nothing felt generic.",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop",
-    size: "landscape",
-  },
-];
-
-// displayedReviews moved inside component
-
 export default function Reviews() {
 
   const [photos, setPhotos] = useState([]);
-  const displayedReviews = photos.length ? [...photos, ...photos] : [...reviews, ...reviews];
+  const displayedReviews = photos.length ? [...photos, ...photos] : [];
 
   useEffect(() => {
 

@@ -28,13 +28,6 @@ export default function AboutUsPage() {
 
         setAboutUsData(data);
 
-        console.log("Firestore Data:", data);
-
-        console.log(
-          "Converted URL:",
-          getDirectDriveLink(data.coverImage)
-        );
-
       }
     };
 
